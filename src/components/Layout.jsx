@@ -2,7 +2,7 @@ import { Outlet, NavLink, Link } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
 import { useCart } from "../context/CartContext"; // Import useCart
 
-const navItems = [
+const navItems = [  
     { name: "Home", path: "/" },
     { name: "Menu", path: "/menu" },
     { name: "About", path: "/about" },
@@ -11,11 +11,11 @@ const navItems = [
 ];
 
 export default function Layout() {
-    const { cartCount } = useCart(); // Get cartCount from CartContext, no setCartCount needed here
+    const { cartCount } = useCart(); // Get cartCount from CartContext
     const { theme, toggleTheme } = useTheme();
 
     return (
-        <div style={styles.root}>
+       <div style={styles.root}>
             <nav style={styles.nav}>
                 <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
                     <div style={styles.navLogo}>
@@ -43,7 +43,7 @@ export default function Layout() {
                     ))}
                 </div>
                 <div style={styles.navRight}> {/* Use CSS variables for themeBtn */}
-                    <button style={styles.themeBtn} onClick={toggleTheme}> {/* Keep consistent */}
+                    <button style={styles.themeBtn} onClick={toggleTheme}>
                         {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
                     </button>
                     <button style={styles.cartBtn}>
@@ -54,7 +54,7 @@ export default function Layout() {
             </nav>
 
             <main>
-                <Outlet /> {/* Removed setCartCount from Outlet context */}
+                <Outlet />
             </main>
 
             <footer style={styles.footer}>
@@ -79,8 +79,7 @@ export default function Layout() {
                         </p>
                     </div>
                     <div style={styles.footerLinks}>
-                        {["Menu", "About Us", "Careers", "Blog"].map((l) => (
-                            <button key={l} style={styles.footerLink}>
+                        {["Menu", "About Us", "Careers", "Blog"].map((l) => (<button key={l} style={styles.footerLink}>
                                 {l}
                             </button>
                         ))}
@@ -244,5 +243,23 @@ const styles = {
         justifyContent: "space-between", // Keep consistent
         color: "var(--card-cal-color)", // Use CSS variable
         fontSize: 13,
+    },
+
+    // Responsive styles for Layout
+    "@media (max-width: 768px)": {
+        nav: { padding: "15px 20px" },
+        navLinks: { display: "none" }, // Hide nav links on smaller screens
+        navRight: { gap: 10 },
+        cartBtn: { padding: "6px 12px", fontSize: 14 },
+        orderNowBtn: { padding: "8px 15px", fontSize: 14 },
+        themeBtn: { padding: "8px 15px", fontSize: 14 },
+        footer: { padding: "40px 20px 20px" },
+        footerTop: { gridTemplateColumns: "1fr", gap: 30 },
+        footerBottom: { flexDirection: "column", gap: 10, textAlign: "center" },
+    },
+    "@media (max-width: 480px)": {
+        navLogo: { gap: 5 },
+        logoText: { fontSize: 20 },
+        logoIcon: { fontSize: 24 },
     },
 };

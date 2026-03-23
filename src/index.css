@@ -1,7 +1,9 @@
 /* Base styles (light theme defaults) */
 :root {
-  --background-color: #f9f9f9; /* Light background for default */
-  --text-color: #333333; /* Dark text for light mode */
+  --background-color: #f9f9f9;
+  /* Light background for default */
+  --text-color: #333333;
+  /* Dark text for light mode */
   --primary-color: #FF6B00;
   --secondary-color: #e65c00;
   --card-background: #ffffff;
@@ -9,16 +11,28 @@
   --card-text-color: #333333;
   --card-desc-color: #666666;
   --card-cal-color: #999999;
-  --header-background: rgba(255, 255, 255, 0.95); /* Semi-transparent white */
+  --header-background: rgba(255, 255, 255, 0.95);
+  /* Semi-transparent white */
   --footer-background: #f0f0f0;
   --button-primary-bg: #FF6B00;
   --button-primary-text: #fff;
   --button-ghost-bg: transparent;
   --button-ghost-border: #ccc;
   --button-ghost-text: #333;
-  --section-background-alt: #f0f0f0; /* For sections like "How it Works" */
-  --promo-gradient-start: #FF6B00;
-  --promo-gradient-end: #e63900;
+  --section-background-alt: #f0f0f0;
+  /* For sections like "How it Works" */
+  --promo-bg-start: #000000;
+  /* Black for light mode promo banner */
+  --promo-bg-end: #333333;
+  /* Dark grey for light mode promo banner */
+  --promo-text-color: #ffffff;
+  /* White text for light mode promo banner */
+  --promo-accent-color: #ffffff;
+  /* White accent for light mode promo banner */
+  --promo-button-bg: #ffffff;
+  /* White button for light mode promo banner */
+  --promo-button-text: #000000;
+  /* Black text for light mode promo banner */
   --review-card-background: #ffffff;
   --review-card-border: #e0e0e0;
   --review-text-color: #555;
@@ -29,12 +43,14 @@
   --cat-chip-text: #555;
 
   /* New variables for alpha colors */
-  --primary-color-alpha-15: rgba(255,107,0,0.15);
-  --primary-color-alpha-dark: #ff8c33; /* Lighter shade of primary for gradients */
+  --primary-color-alpha-15: rgba(255, 107, 0, 0.15);
+  --primary-color-alpha-dark: #ff8c33;
+  /* Lighter shade of primary for gradients */
 }
 
 /* Dark theme overrides */
-html.dark-theme { /* Apply to html element for global effect */
+html.dark-theme {
+  /* Apply to html element for global effect */
   --background-color: #0f0f0f;
   --text-color: #e0e0e0;
   --primary-color: #FF6B00;
@@ -44,7 +60,8 @@ html.dark-theme { /* Apply to html element for global effect */
   --card-text-color: #e0e0e0;
   --card-desc-color: #888;
   --card-cal-color: #555;
-  --header-background: rgba(15, 15, 15, 0.95); /* Semi-transparent dark */
+  --header-background: rgba(15, 15, 15, 0.95);
+  /* Semi-transparent dark */
   --footer-background: #0a0a0a;
   --button-primary-bg: #FF6B00;
   --button-primary-text: #fff;
@@ -52,8 +69,18 @@ html.dark-theme { /* Apply to html element for global effect */
   --button-ghost-border: #444;
   --button-ghost-text: #fff;
   --section-background-alt: #161616;
-  --promo-gradient-start: #FF6B00;
-  --promo-gradient-end: #e63900;
+  --promo-bg-start: #1a1a1a;
+  /* Dark grey for dark mode promo banner */
+  --promo-bg-end: #333333;
+  /* Darker grey for dark mode promo banner */
+  --promo-text-color: #e0e0e0;
+  /* Light text for dark mode promo banner */
+  --promo-accent-color: #FF6B00;
+  /* Primary orange accent for dark mode promo banner */
+  --promo-button-bg: #FF6B00;
+  /* Primary orange button for dark mode promo banner */
+  --promo-button-text: #ffffff;
+  /* White text for dark mode promo banner */
   --review-card-background: #141414;
   --review-card-border: #222;
   --review-text-color: #bbb;
@@ -63,8 +90,9 @@ html.dark-theme { /* Apply to html element for global effect */
   --cat-chip-border: #333;
   --cat-chip-text: #ccc;
 
-  --primary-color-alpha-15: rgba(255,107,0,0.15);
-  --primary-color-alpha-dark: #2a1500; /* Darker shade of primary for gradients */
+  --primary-color-alpha-15: rgba(255, 107, 0, 0.15);
+  --primary-color-alpha-dark: #2a1500;
+  /* Darker shade of primary for gradients */
 }
 
 /* Global body styles using CSS variables */
@@ -75,7 +103,8 @@ body {
   background-color: var(--background-color);
   color: var(--text-color);
   min-height: 100vh;
-  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+  transition: background-color 0.3s ease, color 0.3s ease;
+  /* Smooth transition */
 }
 
 /* General link styling */
@@ -89,8 +118,56 @@ a:hover {
 }
 
 /* Keyframe animations (keep as is, they don't directly depend on theme variables) */
-@keyframes float { 0%,100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-18px) rotate(5deg); } }
-@keyframes orbit1 { 0% { transform: rotate(0deg) translateX(110px) rotate(0deg); } 100% { transform: rotate(360deg) translateX(110px) rotate(-360deg); } }
-@keyframes orbit2 { 0% { transform: rotate(120deg) translateX(110px) rotate(-120deg); } 100% { transform: rotate(480deg) translateX(110px) rotate(-480deg); } }
-@keyframes orbit3 { 0% { transform: rotate(240deg) translateX(110px) rotate(-240deg); } 100% { transform: rotate(600deg) translateX(110px) rotate(-600deg); } }
-@keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(255,107,0,0.4); } 50% { box-shadow: 0 0 0 20px rgba(255,107,0,0); } }
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-18px) rotate(5deg);
+  }
+}
+
+@keyframes orbit1 {
+  0% {
+    transform: rotate(0deg) translateX(110px) rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg) translateX(110px) rotate(-360deg);
+  }
+}
+
+@keyframes orbit2 {
+  0% {
+    transform: rotate(120deg) translateX(110px) rotate(-120deg);
+  }
+
+  100% {
+    transform: rotate(480deg) translateX(110px) rotate(-480deg);
+  }
+}
+
+@keyframes orbit3 {
+  0% {
+    transform: rotate(240deg) translateX(110px) rotate(-240deg);
+  }
+
+  100% {
+    transform: rotate(600deg) translateX(110px) rotate(-600deg);
+  }
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 107, 0, 0.4);
+  }
+
+  50% {
+    box-shadow: 0 0 0 20px rgba(255, 107, 0, 0);
+  }
+}

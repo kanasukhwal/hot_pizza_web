@@ -11,17 +11,17 @@ import { CartProvider } from "./context/CartContext"; // Import CartProvider
 function App() {
   return (
     <ThemeProvider> {/* Wrap the entire app with ThemeProvider */}
-      <CartProvider> {/* Wrap with CartProvider */}
-        <Routes>
-          <Route element={<Layout />}>
-            <Route path="/" element={<HotPizzaLanding />} />
-            <Route path="/about" element={<AboutUs />} />
-            <Route path="/menu" element={<Menu />} />
-            <Route path="/reviews" element={<Reviews />} />
-            <Route path="/contact" element={<Contact />} />
-          </Route>
-        </Routes>
-      </CartProvider>
+        <CartProvider> {/* Wrap with CartProvider */}
+            <Routes>
+                <Route element={<Layout />}>
+                    <Route path="/" element={<HotPizzaLanding />} />
+                    <Route path="/menu" element={<Menu />} />
+                    <Route path="/about" element={<AboutUs />} />
+                    <Route path="/reviews" element={<Reviews />} />
+                    <Route path="/contact" element={<Contact />} />
+                </Route>
+            </Routes>
+        </CartProvider>
     </ThemeProvider>
   );
 }

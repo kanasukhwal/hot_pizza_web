@@ -1,14 +1,18 @@
+import React from "react";
 import { useState } from "react";
+import { useCart } from '../context/CartContext'; // Import useCart to access cart context      
 import { useOutletContext } from "react-router-dom";
 import { menuCategories } from "../components/menuData.js"; // Import menuCategories
 
 export default function Menu() {
-    const { setCartCount } = useOutletContext();
+    // const { setCartCount } = useOutletContext();
     const [addedId, setAddedId] = useState(null);
 
-    const addToCart = (id) => {
-        setCartCount((prevCount) => prevCount + 1); // Use functional update for setCartCount
-        setAddedId(id);
+    const { addToCart } = useCart(); // Get addToCart from CartContext
+
+    const handleAddToCart = (item) => { // Renamed to avoid conflict with context's addToCart
+        addToCart(item); // Call the context's addToCart
+        setAddedId(item.id);
         setTimeout(() => setAddedId(null), 800);
     };
 
@@ -50,7 +54,7 @@ export default function Menu() {
                                                 ...styles.addBtn,
                                                 background: addedId === item.id ? "#22c55e" : "#FF6B00",
                                             }}
-                                            onClick={() => handleAddToCart(item)} // Pass the full item object
+                                            onClick={() => handleAddToCart(item)}
                                         >
                                             {addedId === item.id ? "✓ Added" : "+ Add"}
                                         </button>
@@ -66,12 +70,12 @@ export default function Menu() {
 }
 
 const styles = {
-    section: { padding: "60px 48px 80px" }, // Keep consistent
+    section: { padding: "60px 48px 80px" },
     mainSectionHeader: { marginBottom: 40, textAlign: "center" },
     sectionTag: { color: "var(--primary-color)", fontWeight: 700, fontSize: 14, textTransform: "uppercase", letterSpacing: 2, marginBottom: 10 },
     sectionTitle: { fontSize: 42, fontWeight: 900, letterSpacing: -0.5, color: "var(--text-color)" },
     heroAccent: { color: "var(--primary-color)" },
-    menuGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 24 }, // Keep consistent
+    menuGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 24 },
     card: { background: "var(--card-background)", border: "1px solid var(--card-border)", borderRadius: 18, overflow: "hidden", transition: "transform 0.2s, box-shadow 0.2s" },
     cardImgWrap: { background: "linear-gradient(135deg, var(--card-background), var(--primary-color-alpha-dark))", height: 160, display: "flex", alignItems: "center", justifyContent: "center", position: "relative" },
     cardEmoji: { fontSize: 80 },
@@ -96,5 +100,36 @@ const styles = {
         alignItems: "center",
         justifyContent: "center",
         gap: 10,
+    },
+
+    // Responsive styles for Menu
+    "@media (max-width: 768px)": {
+        section: { padding: "40px 20px" },
+        mainSectionHeader: { marginBottom: 30 },
+        sectionTitle: { fontSize: 36 },
+        categoryHeader: { marginTop: 40, marginBottom: 20 },
+        categoryTitle: { fontSize: 28 },
+        menuGrid: { gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 20 },
+        cardImgWrap: { height: 140 },
+        cardEmoji: { fontSize: 70 },
+        cardName: { fontSize: 16 },
+        cardDesc: { fontSize: 12 },
+        cardCal: { fontSize: 11 },
+        cardPrice: { fontSize: 18 },
+        addBtn: { padding: "6px 12px", fontSize: 12 },
+    },
+    "@media (max-width: 480px)": {
+        section: { padding: "30px 15px" },
+        mainSectionHeader: { marginBottom: 20 },
+        sectionTitle: { fontSize: 30 },
+        categoryTitle: { fontSize: 24 },
+        menuGrid: { gridTemplateColumns: "1fr", gap: 15 },
+        cardImgWrap: { height: 120 },
+        cardEmoji: { fontSize: 60 },
+        cardName: { fontSize: 15 },
+        cardDesc: { fontSize: 11 },
+        cardCal: { fontSize: 10 },
+        cardPrice: { fontSize: 16 },
+        addBtn: { padding: "5px 10px", fontSize: 11 },
     },
 };

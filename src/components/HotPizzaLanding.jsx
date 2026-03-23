@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useCart } from '../context/CartContext';
 import { Link } from "react-router-dom"; // Import Link for navigation
-import { menuCategories } from "../components/menuData.js"; // Corrected import path
+import { menuCategories } from "../components/menuData.js";
 
 
 // Removed the old 'pizzas' array as it's replaced by menuCategories
@@ -28,10 +28,10 @@ export default function HotPizzaLanding() {
   }, []);
   const { addToCart } = useCart(); // Get addToCart from CartContext
   const handleAddToCart = (item) => { // Renamed to avoid conflict with context's addToCart
-    setAddedId(id);
+    addToCart(item); // Call the context's addToCart
+    setAddedId(item.id); // Set the ID of the item just added
     setTimeout(() => setAddedId(null), 800);
   };
-
   // Logic to select a few items for the landing page display
   const selectedItems = [];
 
@@ -162,6 +162,7 @@ export default function HotPizzaLanding() {
         <div style={styles.viewAllContainer}>
           <Link to="/menu" style={styles.viewAllButton}>
             View All Menu Items
+
           </Link>
         </div>
       </section>
@@ -185,16 +186,16 @@ export default function HotPizzaLanding() {
       </section>
 
       {/* PROMO BANNER */}
-      <section style={styles.promoBanner}> {/* Use CSS variables for promoBanner */}
+      <section style={{ ...styles.promoBanner, background: `linear-gradient(135deg, var(--promo-bg-start), var(--promo-bg-end))` }}>
         <div style={styles.promoLeft}>
           <p style={styles.sectionTag}>Limited Time Offer</p>
-          <h2 style={{ ...styles.sectionTitle, fontSize: 36 }}>
-            Get <span style={styles.heroAccent}>30% OFF</span> Your First Order!
+          <h2 style={{ ...styles.sectionTitle, fontSize: 36, color: "var(--promo-text-color)" }}>
+            Get <span style={{ ...styles.heroAccent, color: "var(--promo-accent-color)" }}>30% OFF</span> Your First Order!
           </h2>
-          <p style={{ color: "var(--card-desc-color)", marginBottom: 24 }}>Use code <b style={{ color: "var(--primary-color)" }}>HOTPIZZA30</b> at checkout</p> {/* Use CSS variables */}
-          <button style={styles.primaryBtn}>Claim Offer →</button>
+          <p style={{ color: "var(--promo-text-color)", marginBottom: 24 }}>Use code <b style={{ color: "var(--promo-accent-color)" }}>HOTPIZZA30</b> at checkout</p>
+          <button style={{ ...styles.primaryBtn, background: "var(--promo-button-bg)", color: "var(--promo-button-text)" }}>Claim Offer →</button>
         </div>
-        <div style={styles.promoRight}>🍕🔥🍕</div>
+        <div style={{ ...styles.promoRight, color: "var(--promo-text-color)" }}>🍕🔥🍕</div>
       </section>
 
       {/* REVIEWS */}
@@ -252,7 +253,7 @@ const styles = {
     marginBottom: 20,
     letterSpacing: -1, // Keep consistent
   },
-  heroAccent: { color: "var(--primary-color)" },
+  heroAccent: { color: "var(--primary-color)" }, // Use CSS variable
   heroDesc: {
     color: "var(--card-desc-color)", // Use a variable for description text
     fontSize: 17,
@@ -260,7 +261,7 @@ const styles = {
     marginBottom: 36, // Keep layout consistent
     maxWidth: 460,
   },
-  heroActions: { display: "flex", gap: 16, marginBottom: 48, flexWrap: "wrap" },
+  heroActions: { display: "flex", gap: 16, marginBottom: 48, flexWrap: "wrap" }, // Keep consistent
   primaryBtn: { // Use CSS variables
     background: "var(--button-primary-bg)",
     color: "var(--button-primary-text)",
@@ -284,7 +285,7 @@ const styles = {
     cursor: "pointer",
     fontFamily: "'Nunito', sans-serif",
   },
-  statsRow: { display: "flex", gap: 40 },
+  statsRow: { display: "flex", gap: 40 }, // Keep consistent
   statItem: { display: "flex", flexDirection: "column", gap: 2 },
   statVal: { fontSize: 28, fontWeight: 900, color: "var(--primary-color)" },
   statLabel: { fontSize: 13, color: "var(--card-desc-color)" },
@@ -295,15 +296,15 @@ const styles = {
     borderRadius: "50%",
     background: "radial-gradient(circle, var(--card-background) 60%, var(--primary-color) 100%)",
     border: "3px solid rgba(255,107,0,0.4)",
-    display: "flex", // Keep consistent
+    display: "flex",
     alignItems: "center",
     justifyContent: "center",
     position: "relative",
     animation: "pulse 3s infinite",
-    boxShadow: "0 0 80px rgba(255,107,0,0.25)",
+    boxShadow: "0 0 80px var(--primary-color-alpha-15)", // Use CSS variable
   },
   pizzaEmoji: { fontSize: 110, animation: "float 4s ease-in-out infinite" },
-  orbit1: { position: "absolute", fontSize: 26, animation: "orbit1 8s linear infinite", top: "50%", left: "50%", marginTop: -13, marginLeft: -13 }, // Keep consistent
+  orbit1: { position: "absolute", fontSize: 26, animation: "orbit1 8s linear infinite", top: "50%", left: "50%", marginTop: -13, marginLeft: -13 },
   orbit2: { position: "absolute", fontSize: 26, animation: "orbit2 8s linear infinite", top: "50%", left: "50%", marginTop: -13, marginLeft: -13 },
   orbit3: { position: "absolute", fontSize: 26, animation: "orbit3 8s linear infinite", top: "50%", left: "50%", marginTop: -13, marginLeft: -13 },
   floatCard1: {
@@ -313,11 +314,11 @@ const styles = {
     background: "var(--card-background)",
     border: "1px solid var(--card-border)",
     borderRadius: 12,
-    padding: "12px 18px",
+    padding: "12px 18px", // Keep font size consistent
     fontSize: 14, // Keep font size consistent
     color: "var(--card-text-color)", // Use card text color
     display: "flex",
-    gap: 8,
+    gap: 8, // Keep consistent
     alignItems: "center",
     boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
   },
@@ -338,29 +339,29 @@ const styles = {
   },
   section: { padding: "60px 48px 80px" },
   sectionHeader: { marginBottom: 40, textAlign: "center" },
-  sectionTag: { color: "#FF6B00", fontWeight: 700, fontSize: 14, textTransform: "uppercase", letterSpacing: 2, marginBottom: 10 },
-  sectionTitle: { fontSize: 42, fontWeight: 900, letterSpacing: -0.5 },
-  categoryRow: { display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" },
+  sectionTag: { color: "var(--primary-color)", fontWeight: 700, fontSize: 14, textTransform: "uppercase", letterSpacing: 2, marginBottom: 10 }, // Use CSS variable
+  sectionTitle: { fontSize: 42, fontWeight: 900, letterSpacing: -0.5, color: "var(--text-color)" }, // Use CSS variable
+  categoryRow: { display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }, // Keep consistent
   catChip: {
-    background: "#1a1a1a",
-    border: "1px solid #333",
-    color: "#ccc",
+    background: "var(--cat-chip-bg)", // Use CSS variable
+    border: "1px solid var(--cat-chip-border)", // Use CSS variable
+    color: "var(--cat-chip-text)", // Use CSS variable
     borderRadius: 50,
     padding: "10px 22px",
     fontSize: 15,
-    cursor: "pointer", // Keep consistent
+    cursor: "pointer",
     fontFamily: "'Nunito', sans-serif",
     fontWeight: 600,
     transition: "all 0.2s",
   },
-  menuGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 24 },
+  menuGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 24 }, // Keep consistent
   card: {
-    background: "#141414",
-    border: "1px solid #222",
+    background: "var(--card-background)", // Use CSS variable
+    border: "1px solid var(--card-border)", // Use CSS variable
     borderRadius: 18,
     overflow: "hidden",
     transition: "transform 0.2s, box-shadow 0.2s",
-  },
+  }, // Keep consistent
   cardImgWrap: {
     background: "linear-gradient(135deg, #1e1e1e, #2a1500)",
     height: 160,
@@ -384,9 +385,9 @@ const styles = {
   cardBody: { padding: "16px 18px 18px" },
   cardName: { fontSize: 18, fontWeight: 800, marginBottom: 6 },
   cardDesc: { color: "#888", fontSize: 13, marginBottom: 8, lineHeight: 1.5 },
-  cardCal: { color: "#555", fontSize: 12, marginBottom: 14 },
+  cardCal: { color: "var(--card-cal-color)", fontSize: 12, marginBottom: 14 },
   cardFooter: { display: "flex", justifyContent: "space-between", alignItems: "center" },
-  cardPrice: { fontSize: 22, fontWeight: 900, color: "#FF6B00" },
+  cardPrice: { fontSize: 22, fontWeight: 900, color: "var(--primary-color)" },
   addBtn: {
     color: "#fff",
     border: "none",
@@ -399,31 +400,31 @@ const styles = {
     transition: "background 0.3s",
   },
   stepsRow: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 24 },
-  stepCard: { textAlign: "center", padding: 24 },
-  stepIcon: { fontSize: 40, marginBottom: 8 },
-  stepNum: { fontSize: 48, fontWeight: 900, color: "rgba(255,107,0,0.15)", lineHeight: 1, marginBottom: 8 },
-  stepTitle: { fontSize: 18, fontWeight: 800, marginBottom: 6, color: "#fff" },
-  stepDesc: { color: "#888", fontSize: 14, lineHeight: 1.6 },
+  stepCard: { textAlign: "center", padding: 24, background: "var(--card-background)", borderRadius: 18, border: "1px solid var(--card-border)" }, // Use CSS variables
+  stepIcon: { fontSize: 40, marginBottom: 8, color: "var(--primary-color)" }, // Use CSS variable
+  stepNum: { fontSize: 48, fontWeight: 900, color: "var(--primary-color-alpha-15)", lineHeight: 1, marginBottom: 8 }, // Use CSS variable
+  stepTitle: { fontSize: 18, fontWeight: 800, marginBottom: 6, color: "var(--card-text-color)" }, // Use CSS variable
+  stepDesc: { color: "var(--card-desc-color)", fontSize: 14, lineHeight: 1.6 }, // Use CSS variable
   promoBanner: {
-    margin: "0 48px 80px",
-    background: "linear-gradient(135deg, #FF6B00, #e63900)",
+    margin: "0 48px 80px", // Keep consistent
+    // Background is now set inline in the component
     borderRadius: 24,
     padding: "60px 48px",
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-  }, // Keep consistent
+  },
   promoLeft: { flex: 1 },
   promoRight: { fontSize: 100, opacity: 0.3 },
   reviewsRow: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 24 },
-  reviewCard: {
-    background: "#141414",
-    border: "1px solid #222",
+  reviewCard: { // Use CSS variables
+    background: "var(--review-card-background)",
+    border: "1px solid var(--review-card-border)",
     borderRadius: 18,
     padding: 28,
   },
-  reviewStars: { fontSize: 18, marginBottom: 14 },
-  reviewText: { color: "#bbb", fontSize: 15, lineHeight: 1.7, marginBottom: 20, fontStyle: "italic" },
+  reviewStars: { fontSize: 18, marginBottom: 14, color: "var(--primary-color)" }, // Use CSS variable
+  reviewText: { color: "var(--review-text-color)", fontSize: 15, lineHeight: 1.7, marginBottom: 20, fontStyle: "italic" }, // Use CSS variable
   reviewAuthor: { display: "flex", alignItems: "center", gap: 12 },
   reviewAvatar: {
     width: 40,
@@ -435,8 +436,8 @@ const styles = {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    fontSize: 16, // Keep consistent
-  },
+    fontSize: 16,
+  }, // Keep consistent
   reviewName: { fontWeight: 700, fontSize: 15 },
   viewAllContainer: { // Added styles for the View All button
     textAlign: "center",
@@ -446,8 +447,8 @@ const styles = {
     display: "inline-block",
     background: "#FF6B00",
     color: "#fff",
-    padding: "12px 25px",
-    borderRadius: 8,
+    padding: "12px 25px", // Keep consistent
+    borderRadius: 8, // Keep consistent
     textDecoration: "none",
     fontWeight: 700,
     fontSize: 16,
@@ -455,5 +456,63 @@ const styles = {
     "&:hover": { // Note: Inline styles don't support pseudo-classes directly like this.
       background: "#e65c00",
     }
+  },
+
+  // Responsive styles for HotPizzaLanding
+  "@media (max-width: 768px)": {
+    hero: {
+      flexDirection: "column",
+      padding: "40px 20px",
+      minHeight: "auto",
+      gap: 20,
+    },
+    heroLeft: { textAlign: "center", maxWidth: "100%" },
+    heroTitle: { fontSize: 42 },
+    heroDesc: { maxWidth: "100%", margin: "0 auto 24px auto" },
+    heroActions: { justifyContent: "center" },
+    statsRow: { justifyContent: "center", gap: 20 },
+    heroRight: { minHeight: 300, width: "100%" },
+    pizzaCircle: { width: 200, height: 200 },
+    pizzaEmoji: { fontSize: 80 },
+    orbit1: { transform: "rotate(0deg) translateX(80px) rotate(0deg)" },
+    orbit2: { transform: "rotate(120deg) translateX(80px) rotate(-120deg)" },
+    orbit3: { transform: "rotate(240deg) translateX(80px) rotate(-240deg)" },
+    floatCard1: { top: "5%", right: "2%", padding: "8px 12px", fontSize: 12 },
+    floatCard2: { bottom: "5%", left: "2%", padding: "8px 12px", fontSize: 12 },
+    section: { padding: "40px 20px" },
+    promoBanner: { flexDirection: "column", margin: "0 20px 40px", padding: "40px 20px", textAlign: "center" },
+    promoLeft: { marginBottom: 20 },
+    promoRight: { fontSize: 80 },
+    reviewsRow: { gridTemplateColumns: "1fr" },
+    stepsRow: { gridTemplateColumns: "1fr" },
+  },
+  "@media (max-width: 480px)": {
+    heroTitle: { fontSize: 36 },
+    heroActions: { flexDirection: "column", gap: 10 },
+    primaryBtn: { width: "100%" },
+    ghostBtn: { width: "100%" },
+    statsRow: { flexDirection: "column", gap: 15 },
+    pizzaCircle: { width: 180, height: 180 },
+    pizzaEmoji: { fontSize: 70 },
+    orbit1: { transform: "rotate(0deg) translateX(70px) rotate(0deg)" },
+    orbit2: { transform: "rotate(120deg) translateX(70px) rotate(-120deg)" },
+    orbit3: { transform: "rotate(240deg) translateX(70px) rotate(-240deg)" },
+    floatCard1: { fontSize: 10 },
+    floatCard2: { fontSize: 10 },
+    catChip: { padding: "8px 15px", fontSize: 13 },
+    menuGrid: { gridTemplateColumns: "1fr" },
+    cardBody: { padding: "12px 15px" },
+    cardName: { fontSize: 16 },
+    cardDesc: { fontSize: 12 },
+    cardCal: { fontSize: 11 },
+    cardPrice: { fontSize: 18 },
+    addBtn: { padding: "6px 12px", fontSize: 12 },
+    stepCard: { padding: 15 },
+    stepIcon: { fontSize: 30 },
+    stepNum: { fontSize: 40 },
+    stepTitle: { fontSize: 16 },
+    stepDesc: { fontSize: 13 },
+    promoLeft: { fontSize: 14 },
+    promoRight: { fontSize: 60 },
   },
 };
