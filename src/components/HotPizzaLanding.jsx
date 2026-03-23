@@ -1,46 +1,10 @@
 import { useState, useEffect } from "react";
 import { useCart } from '../context/CartContext';
+import { Link } from "react-router-dom"; // Import Link for navigation
+import { menuCategories } from "../components/menuData.js"; // Corrected import path
 
 
-const pizzas = [
-  {
-    id: 1,
-    name: "Margherita Classic",
-    desc: "Fresh tomato, mozzarella, basil",
-    price: "$12.99",
-    tag: "Bestseller",
-    emoji: "🍕",
-    cal: "820 kcal",
-  },
-  {
-    id: 2,
-    name: "Pepperoni Feast",
-    desc: "Double pepperoni, cheddar, oregano",
-    price: "$15.99",
-    tag: "Spicy",
-    emoji: "🔥",
-    cal: "960 kcal",
-  },
-  {
-    id: 3,
-    name: "BBQ Chicken",
-    desc: "Grilled chicken, BBQ sauce, onions",
-    price: "$14.99",
-    tag: "New",
-    emoji: "🍗",
-    cal: "890 kcal",
-  },
-  {
-    id: 4,
-    name: "Veggie Supreme",
-    desc: "Bell peppers, mushrooms, olives",
-    price: "$13.49",
-    tag: "Veg",
-    emoji: "🥦",
-    cal: "750 kcal",
-  },
-];
-
+// Removed the old 'pizzas' array as it's replaced by menuCategories
 const steps = [
   { icon: "📍", title: "Choose Location", desc: "Enter your delivery address" },
   { icon: "🍕", title: "Pick Your Pizza", desc: "Browse our delicious menu" },
@@ -62,11 +26,39 @@ export default function HotPizzaLanding() {
   useEffect(() => {
     setTimeout(() => setVisible(true), 100);
   }, []);
-  const addToCart = (id) => {
-    setCartCount((c) => c + 1);
+  const { addToCart } = useCart(); // Get addToCart from CartContext
+  const handleAddToCart = (item) => { // Renamed to avoid conflict with context's addToCart
     setAddedId(id);
     setTimeout(() => setAddedId(null), 800);
   };
+
+  // Logic to select a few items for the landing page display
+  const selectedItems = [];
+
+  // Get 2 pizzas
+  const pizzaCategory = menuCategories.find(cat => cat.category === "Pizza Menu");
+  if (pizzaCategory && pizzaCategory.items.length >= 2) {
+    selectedItems.push(pizzaCategory.items[0]);
+    selectedItems.push(pizzaCategory.items[1]);
+  }
+
+  // Get 1 sandwich
+  const sandwichCategory = menuCategories.find(cat => cat.category === "Sandwich Menu (Regular)");
+  if (sandwichCategory && sandwichCategory.items.length >= 1) {
+    selectedItems.push(sandwichCategory.items[0]);
+  }
+
+  // Get 1 cold coffee/shake
+  const beveragesCategory = menuCategories.find(cat => cat.category === "Extra Shakes / Beverages");
+  if (beveragesCategory && beveragesCategory.items.length >= 1) {
+    selectedItems.push(beveragesCategory.items[0]);
+  } else {
+    // Fallback if 'Extra Shakes / Beverages' is empty, try 'Sandwich Menu (Regular)' for cold coffee
+    const coldCoffee = sandwichCategory?.items.find(item => item.name.includes("Cold Coffee"));
+    if (coldCoffee) {
+      selectedItems.push(coldCoffee);
+    }
+  }
   return (
     <>
       {/* HERO */}
@@ -85,7 +77,7 @@ export default function HotPizzaLanding() {
             We Got You!
           </h1>
           <p style={styles.heroDesc}>
-            Freshly baked, loaded with toppings, and delivered blazing hot to your doorstep. The best pizza experience in the city.
+            Freshly baked, loaded with toppings, and delivered blazing hot to your doorstep. The best pizza experience in the city. {/* Keep consistent */}
           </p>
           <div style={styles.heroActions}>
             <button style={styles.primaryBtn}>Order Now →</button>
@@ -112,7 +104,7 @@ export default function HotPizzaLanding() {
             <span>⏱</span> Delivery in <b>28 min</b>
           </div>
           <div style={styles.floatCard2}>
-            <span>⭐</span> <b>4.9</b> Rating
+            <span>⭐</span> <b>4.9</b> Rating {/* Keep consistent */}
           </div>
         </div>
       </section>
@@ -123,7 +115,7 @@ export default function HotPizzaLanding() {
           <p style={styles.sectionTag}>Our Categories</p>
           <h2 style={styles.sectionTitle}>What Are You <span style={styles.heroAccent}>Craving?</span></h2>
         </div>
-        <div style={styles.categoryRow}>
+        <div style={styles.categoryRow}> {/* Use CSS variables for catChip */}
           {["🍕 Classic", "🔥 Spicy", "🥦 Veggie", "🍗 BBQ", "🧀 Cheesy", "🌶 Fiery"].map((cat) => (
             <button key={cat} style={styles.catChip}>{cat}</button>
           ))}
@@ -133,42 +125,49 @@ export default function HotPizzaLanding() {
       {/* MENU */}
       <section style={styles.section}>
         <div style={styles.sectionHeader}>
-          <p style={styles.sectionTag}>🍕 Our Menu</p>
+          <p style={styles.sectionTag}>😋 What Are You Craving?</p>
           <h2 style={styles.sectionTitle}>
-            Popular <span style={styles.heroAccent}>Picks</span>
+            Our <span style={styles.heroAccent}>Popular</span> Picks
           </h2>
         </div>
         <div style={styles.menuGrid}>
-          {pizzas.map((p) => (
-            <div key={p.id} style={styles.card}>
+          {selectedItems.map((item) => (
+            <div key={item.id} style={styles.card}>
               <div style={styles.cardImgWrap}>
-                <div style={styles.cardEmoji}>{p.emoji}</div>
-                <span style={styles.cardTag}>{p.tag}</span>
+                <div style={styles.cardEmoji}>{item.emoji}</div>
+                <span style={styles.cardTag}>{item.tag}</span>
               </div>
               <div style={styles.cardBody}>
-                <h3 style={styles.cardName}>{p.name}</h3>
-                <p style={styles.cardDesc}>{p.desc}</p>
-                <p style={styles.cardCal}>{p.cal}</p>
+                <h3 style={styles.cardName}>{item.name}</h3>
+                <p style={item.desc ? styles.cardDesc : { ...styles.cardDesc, fontStyle: 'italic', color: '#aaa' }}>
+                  {item.desc || "No description available."}
+                </p>
+                <p style={styles.cardCal}>{item.cal}</p>
                 <div style={styles.cardFooter}>
-                  <span style={styles.cardPrice}>{p.price}</span>
+                  <span style={styles.cardPrice}>{item.price}</span>
                   <button
                     style={{
                       ...styles.addBtn,
-                      background: addedId === p.id ? "#22c55e" : "#FF6B00",
+                      background: addedId === item.id ? "#22c55e" : "#FF6B00",
                     }}
-                    onClick={() => addToCart(p.id)}
+                    onClick={() => handleAddToCart(item)} // Pass the full item object
                   >
-                    {addedId === p.id ? "✓ Added" : "+ Add"}
+                    {addedId === item.id ? "✓ Added" : "+ Add"}
                   </button>
                 </div>
               </div>
             </div>
           ))}
         </div>
+        <div style={styles.viewAllContainer}>
+          <Link to="/menu" style={styles.viewAllButton}>
+            View All Menu Items
+          </Link>
+        </div>
       </section>
 
       {/* HOW IT WORKS */}
-      <section style={{ ...styles.section, background: "#161616", borderRadius: 24, padding: "60px 40px", margin: "0 40px 80px" }}>
+      <section style={{ ...styles.section, background: "var(--section-background-alt)", borderRadius: 24, padding: "60px 40px", margin: "0 40px 80px" }}> {/* Use CSS variable */}
         <div style={styles.sectionHeader}>
           <p style={styles.sectionTag}>Simple Process</p>
           <h2 style={styles.sectionTitle}>How It <span style={styles.heroAccent}>Works</span></h2>
@@ -186,13 +185,13 @@ export default function HotPizzaLanding() {
       </section>
 
       {/* PROMO BANNER */}
-      <section style={styles.promoBanner}>
+      <section style={styles.promoBanner}> {/* Use CSS variables for promoBanner */}
         <div style={styles.promoLeft}>
           <p style={styles.sectionTag}>Limited Time Offer</p>
           <h2 style={{ ...styles.sectionTitle, fontSize: 36 }}>
             Get <span style={styles.heroAccent}>30% OFF</span> Your First Order!
           </h2>
-          <p style={{ color: "#aaa", marginBottom: 24 }}>Use code <b style={{ color: "#FF6B00" }}>HOTPIZZA30</b> at checkout</p>
+          <p style={{ color: "var(--card-desc-color)", marginBottom: 24 }}>Use code <b style={{ color: "var(--primary-color)" }}>HOTPIZZA30</b> at checkout</p> {/* Use CSS variables */}
           <button style={styles.primaryBtn}>Claim Offer →</button>
         </div>
         <div style={styles.promoRight}>🍕🔥🍕</div>
@@ -207,7 +206,7 @@ export default function HotPizzaLanding() {
         <div style={styles.reviewsRow}>
           {reviews.map((r, i) => (
             <div key={i} style={styles.reviewCard}>
-              <div style={styles.reviewStars}>{"⭐".repeat(r.stars)}</div>
+              <div style={styles.reviewStars}>{"⭐".repeat(r.stars)}</div> {/* Keep consistent */}
               <p style={styles.reviewText}>"{r.text}"</p>
               <div style={styles.reviewAuthor}>
                 <div style={styles.reviewAvatar}>{r.avatar}</div>
@@ -224,12 +223,12 @@ export default function HotPizzaLanding() {
 
 const styles = {
   hero: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: "80px 48px 60px",
-    minHeight: "88vh",
-    gap: 40,
+    display: "flex", // Keep consistent
+    alignItems: "center", // Keep consistent
+    justifyContent: "space-between", // Keep consistent
+    padding: "80px 48px 60px", // Keep consistent
+    minHeight: "88vh", // Keep consistent
+    gap: 40, // Keep consistent
     background: "radial-gradient(ellipse at 70% 50%, rgba(255,107,0,0.12) 0%, transparent 60%)",
   },
   heroLeft: { flex: 1, maxWidth: 560 },
@@ -242,7 +241,7 @@ const styles = {
     borderRadius: 50,
     padding: "8px 18px",
     fontSize: 14,
-    fontWeight: 600,
+    fontWeight: 600, // Keep consistent
     color: "#FF6B00",
     marginBottom: 24,
   },
@@ -251,21 +250,21 @@ const styles = {
     fontWeight: 900,
     lineHeight: 1.1,
     marginBottom: 20,
-    letterSpacing: -1,
+    letterSpacing: -1, // Keep consistent
   },
-  heroAccent: { color: "#FF6B00" },
+  heroAccent: { color: "var(--primary-color)" },
   heroDesc: {
-    color: "#aaa",
+    color: "var(--card-desc-color)", // Use a variable for description text
     fontSize: 17,
     lineHeight: 1.7,
-    marginBottom: 36,
+    marginBottom: 36, // Keep layout consistent
     maxWidth: 460,
   },
   heroActions: { display: "flex", gap: 16, marginBottom: 48, flexWrap: "wrap" },
-  primaryBtn: {
-    background: "#FF6B00",
-    color: "#fff",
-    border: "none",
+  primaryBtn: { // Use CSS variables
+    background: "var(--button-primary-bg)",
+    color: "var(--button-primary-text)",
+    border: "none", // Keep consistent
     borderRadius: 12,
     padding: "14px 32px",
     fontWeight: 800,
@@ -274,10 +273,10 @@ const styles = {
     fontFamily: "'Nunito', sans-serif",
     transition: "transform 0.2s",
   },
-  ghostBtn: {
-    background: "transparent",
-    color: "#fff",
-    border: "1px solid #444",
+  ghostBtn: { // Use CSS variables
+    background: "var(--button-ghost-bg)",
+    color: "var(--button-ghost-text)",
+    border: "1px solid var(--button-ghost-border)", // Keep consistent
     borderRadius: 12,
     padding: "14px 28px",
     fontWeight: 700,
@@ -287,16 +286,16 @@ const styles = {
   },
   statsRow: { display: "flex", gap: 40 },
   statItem: { display: "flex", flexDirection: "column", gap: 2 },
-  statVal: { fontSize: 28, fontWeight: 900, color: "#FF6B00" },
-  statLabel: { fontSize: 13, color: "#888" },
+  statVal: { fontSize: 28, fontWeight: 900, color: "var(--primary-color)" },
+  statLabel: { fontSize: 13, color: "var(--card-desc-color)" },
   heroRight: { flex: 1, display: "flex", justifyContent: "center", alignItems: "center", position: "relative", minHeight: 400 },
   pizzaCircle: {
     width: 280,
     height: 280,
     borderRadius: "50%",
-    background: "radial-gradient(circle, #1e1e1e 60%, #FF6B00 100%)",
+    background: "radial-gradient(circle, var(--card-background) 60%, var(--primary-color) 100%)",
     border: "3px solid rgba(255,107,0,0.4)",
-    display: "flex",
+    display: "flex", // Keep consistent
     alignItems: "center",
     justifyContent: "center",
     position: "relative",
@@ -304,19 +303,19 @@ const styles = {
     boxShadow: "0 0 80px rgba(255,107,0,0.25)",
   },
   pizzaEmoji: { fontSize: 110, animation: "float 4s ease-in-out infinite" },
-  orbit1: { position: "absolute", fontSize: 26, animation: "orbit1 8s linear infinite", top: "50%", left: "50%", marginTop: -13, marginLeft: -13 },
+  orbit1: { position: "absolute", fontSize: 26, animation: "orbit1 8s linear infinite", top: "50%", left: "50%", marginTop: -13, marginLeft: -13 }, // Keep consistent
   orbit2: { position: "absolute", fontSize: 26, animation: "orbit2 8s linear infinite", top: "50%", left: "50%", marginTop: -13, marginLeft: -13 },
   orbit3: { position: "absolute", fontSize: 26, animation: "orbit3 8s linear infinite", top: "50%", left: "50%", marginTop: -13, marginLeft: -13 },
   floatCard1: {
     position: "absolute",
     top: "10%",
     right: "5%",
-    background: "#1a1a1a",
-    border: "1px solid #333",
+    background: "var(--card-background)",
+    border: "1px solid var(--card-border)",
     borderRadius: 12,
     padding: "12px 18px",
-    fontSize: 14,
-    color: "#ccc",
+    fontSize: 14, // Keep font size consistent
+    color: "var(--card-text-color)", // Use card text color
     display: "flex",
     gap: 8,
     alignItems: "center",
@@ -326,7 +325,7 @@ const styles = {
     position: "absolute",
     bottom: "12%",
     left: "2%",
-    background: "#FF6B00",
+    background: "var(--primary-color)", // Use CSS variable
     borderRadius: 12,
     padding: "12px 18px",
     fontSize: 14,
@@ -349,7 +348,7 @@ const styles = {
     borderRadius: 50,
     padding: "10px 22px",
     fontSize: 15,
-    cursor: "pointer",
+    cursor: "pointer", // Keep consistent
     fontFamily: "'Nunito', sans-serif",
     fontWeight: 600,
     transition: "all 0.2s",
@@ -370,7 +369,7 @@ const styles = {
     justifyContent: "center",
     position: "relative",
   },
-  cardEmoji: { fontSize: 80 },
+  cardEmoji: { fontSize: 80 }, // Keep consistent
   cardTag: {
     position: "absolute",
     top: 12,
@@ -413,7 +412,7 @@ const styles = {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-  },
+  }, // Keep consistent
   promoLeft: { flex: 1 },
   promoRight: { fontSize: 100, opacity: 0.3 },
   reviewsRow: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 24 },
@@ -436,7 +435,25 @@ const styles = {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    fontSize: 16,
+    fontSize: 16, // Keep consistent
   },
   reviewName: { fontWeight: 700, fontSize: 15 },
+  viewAllContainer: { // Added styles for the View All button
+    textAlign: "center",
+    marginTop: 40,
+  },
+  viewAllButton: {
+    display: "inline-block",
+    background: "#FF6B00",
+    color: "#fff",
+    padding: "12px 25px",
+    borderRadius: 8,
+    textDecoration: "none",
+    fontWeight: 700,
+    fontSize: 16,
+    transition: "background 0.3s",
+    "&:hover": { // Note: Inline styles don't support pseudo-classes directly like this.
+      background: "#e65c00",
+    }
+  },
 };

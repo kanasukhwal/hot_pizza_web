@@ -1,5 +1,6 @@
-import { useState } from "react";
 import { Outlet, NavLink, Link } from "react-router-dom";
+import { useTheme } from "../context/ThemeContext";
+import { useCart } from "../context/CartContext"; // Import useCart
 
 const navItems = [
     { name: "Home", path: "/" },
@@ -10,7 +11,8 @@ const navItems = [
 ];
 
 export default function Layout() {
-    const [cartCount, setCartCount] = useState(0);
+    const { cartCount } = useCart(); // Get cartCount from CartContext, no setCartCount needed here
+    const { theme, toggleTheme } = useTheme();
 
     return (
         <div style={styles.root}>
@@ -40,7 +42,10 @@ export default function Layout() {
                         </NavLink>
                     ))}
                 </div>
-                <div style={styles.navRight}>
+                <div style={styles.navRight}> {/* Use CSS variables for themeBtn */}
+                    <button style={styles.themeBtn} onClick={toggleTheme}> {/* Keep consistent */}
+                        {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
+                    </button>
                     <button style={styles.cartBtn}>
                         🛒 <span style={styles.cartBadge}>{cartCount}</span>
                     </button>
@@ -49,7 +54,7 @@ export default function Layout() {
             </nav>
 
             <main>
-                <Outlet context={{ setCartCount }} />
+                <Outlet /> {/* Removed setCartCount from Outlet context */}
             </main>
 
             <footer style={styles.footer}>
@@ -120,8 +125,8 @@ export default function Layout() {
 const styles = {
     root: {
         fontFamily: "'Nunito', sans-serif",
-        background: "#0f0f0f",
-        color: "#fff",
+        background: "var(--background-color)", // Use CSS variable
+        color: "var(--text-color)", // Use CSS variable
         minHeight: "100vh",
     },
     nav: {
@@ -129,8 +134,8 @@ const styles = {
         alignItems: "center",
         justifyContent: "space-between",
         padding: "18px 48px",
-        background: "rgba(15,15,15,0.95)",
-        position: "sticky",
+        background: "var(--header-background)", // Use CSS variable
+        position: "sticky", // Keep consistent
         top: 0,
         zIndex: 100,
         borderBottom: "1px solid #222",
@@ -138,57 +143,69 @@ const styles = {
     },
     navLogo: { display: "flex", alignItems: "center", gap: 10 },
     logoIcon: { fontSize: 28 },
-    logoText: { fontSize: 24, fontWeight: 900, letterSpacing: 1 },
-    logoAccent: { color: "#FF6B00" },
+    logoText: { fontSize: 24, fontWeight: 900, letterSpacing: 1, color: "var(--text-color)" },
+    logoAccent: { color: "var(--primary-color)" }, // Use CSS variable
     navLinks: { display: "flex", gap: 4 },
     navLink: {
-        background: "none",
+        background: "none", // Keep consistent
         border: "none",
         cursor: "pointer",
         fontSize: 15,
         fontWeight: 600,
-        padding: "6px 16px",
+        padding: "6px 16px", // Keep consistent
         fontFamily: "'Nunito', sans-serif",
         transition: "color 0.2s",
-        textDecoration: "none",
+        textDecoration: "none", // Keep consistent
     },
     navRight: { display: "flex", alignItems: "center", gap: 14 },
     cartBtn: {
-        background: "#1a1a1a",
-        border: "1px solid #333",
-        color: "#fff",
+        background: "var(--card-background)", // Use CSS variable
+        border: "1px solid var(--card-border)", // Use CSS variable
+        color: "var(--card-text-color)", // Use CSS variable
         borderRadius: 10,
-        padding: "8px 16px",
+        padding: "8px 16px", // Keep consistent
         fontSize: 16,
         cursor: "pointer",
         position: "relative",
         fontFamily: "'Nunito', sans-serif",
     },
     cartBadge: {
-        background: "#FF6B00",
-        color: "#fff",
+        background: "var(--primary-color)", // Use CSS variable
+        color: "var(--button-primary-text)", // Use CSS variable
         borderRadius: "50%",
         fontSize: 11,
-        padding: "1px 6px",
+        padding: "1px 6px", // Keep consistent
         marginLeft: 4,
         fontWeight: 700,
     },
     orderNowBtn: {
-        background: "#FF6B00",
-        color: "#fff",
+        background: "var(--button-primary-bg)", // Use CSS variable
+        color: "var(--button-primary-text)", // Use CSS variable
         border: "none",
         borderRadius: 10,
-        padding: "10px 22px",
+        padding: "10px 22px", // Keep consistent
         fontWeight: 700,
         fontSize: 15,
         cursor: "pointer",
         fontFamily: "'Nunito', sans-serif",
     },
-    footer: {
-        background: "#0a0a0a",
-        borderTop: "1px solid #1a1a1a",
-        padding: "60px 48px 28px",
+    themeBtn: {
+        background: "var(--card-background)", // Use CSS variable
+        border: "1px solid var(--card-border)", // Use CSS variable
+        color: "var(--card-text-color)", // Use CSS variable
+        borderRadius: 10,
+        padding: "10px 16px", // Keep consistent
+        fontSize: 16,
+        cursor: "pointer",
+        position: "relative",
+        fontFamily: "'Nunito', sans-serif",
+
     },
+    footer: {
+        background: "var(--footer-background)", // Use CSS variable
+        borderTop: "1px solid var(--card-border)", // Use CSS variable
+        padding: "60px 48px 28px",
+    }, // Keep consistent
     footerTop: {
         display: "grid",
         gridTemplateColumns: "2fr 1fr 1fr 1.5fr",
@@ -198,8 +215,8 @@ const styles = {
     footerLinks: { display: "flex", flexDirection: "column", gap: 10 },
     footerLink: {
         background: "none",
-        border: "none",
-        color: "#888",
+        border: "none", // Keep consistent
+        color: "var(--card-desc-color)", // Use CSS variable
         cursor: "pointer",
         fontSize: 14,
         textAlign: "left",
@@ -209,11 +226,11 @@ const styles = {
     appBtn: {
         display: "block",
         width: "100%",
-        background: "#1a1a1a",
-        border: "1px solid #333",
-        color: "#ccc",
+        background: "var(--card-background)", // Use CSS variable
+        border: "1px solid var(--card-border)", // Use CSS variable
+        color: "var(--card-text-color)", // Use CSS variable
         borderRadius: 10,
-        padding: "10px 16px",
+        padding: "10px 16px", // Keep consistent
         fontSize: 13,
         cursor: "pointer",
         fontFamily: "'Nunito', sans-serif",
@@ -221,11 +238,11 @@ const styles = {
         textAlign: "left",
     },
     footerBottom: {
-        borderTop: "1px solid #1a1a1a",
+        borderTop: "1px solid var(--card-border)", // Use CSS variable
         paddingTop: 24,
         display: "flex",
-        justifyContent: "space-between",
-        color: "#555",
+        justifyContent: "space-between", // Keep consistent
+        color: "var(--card-cal-color)", // Use CSS variable
         fontSize: 13,
     },
 };
