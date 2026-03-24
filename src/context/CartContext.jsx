@@ -1,30 +1,50 @@
-import React, { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from "react";
 
 const CartContext = createContext();
 
-export const useCart = () => useContext(CartContext);
+export function CartProvider({ children }) {
+    const [cart, setCart] = useState([]);
+    const [selectedLocation, setSelectedLocation] = useState(null);
+    const [notification, setNotification] = useState(null);
 
-export const CartProvider = ({ children }) => {
-    const [cartItems, setCartItems] = useState([]);
-
-    const addToCart = (item) => {
-        setCartItems((prevItems) => {
-            const existingItem = prevItems.find((i) => i.id === item.id);
-            if (existingItem) {
-                return prevItems.map((i) =>
-                    i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
-                );
-            }
-            return [...prevItems, { ...item, quantity: 1 }];
-        });
+    const showNotification = (msg, type = "success") => {
+        setNotification({ msg, type });
+        setTimeout(() => setNotification(null), 3000);
     };
 
-    // For now, cartCount is just the total number of unique items in the cart
-    const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+    const addToCart = (item) => {
+        setCart((prev) => {
+            const existing = prev.find((i) => i.id === item.id);
+            if (existing) {
+                return prev.map((i) => i.id === item.id ? { ...i, qty: i.qty + 1 } : i);
+            }
+            return [...prev, { ...item, qty: 1 }];
+        });
+        showNotification(`${item.name} added to cart! 🍕`);
+    };
+
+    const removeFromCart = (id) => {
+        setCart((prev) => prev.filter((i) => i.id !== id));
+    };
+
+    const updateQty = (id, delta) => {
+        setCart((prev) =>
+            prev
+                .map((i) => i.id === id ? { ...i, qty: i.qty + delta } : i)
+                .filter((i) => i.qty > 0)
+        );
+    };
+
+    const clearCart = () => setCart([]);
+
+    const total = cart.reduce((sum, i) => sum + parseFloat(i.price.replace("$", "")) * i.qty, 0);
+    const count = cart.reduce((sum, i) => sum + i.qty, 0);
 
     return (
-        <CartContext.Provider value={{ cartItems, addToCart, cartCount }}>
+        <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQty, clearCart, total, count, selectedLocation, setSelectedLocation, notification, showNotification }}>
             {children}
         </CartContext.Provider>
     );
-};
+}
+
+export const useCart = () => useContext(CartContext);
