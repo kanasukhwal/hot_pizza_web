@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import Cart from "../components/Cart.jsx";
+import Cart from "./Cart.jsx";
 import { useTheme } from "../context/ThemeContext";
 import logo from "../assets/logo.png";
 
@@ -22,7 +22,6 @@ export default function Navbar() {
   return (
     <>
       <nav style={s.nav}>
-        {/* Logo */}
         <Link to="/" style={s.logo} onClick={() => setMenuOpen(false)}>
           <img src={logo} alt="logo" style={{ width: 40, height: 40, borderRadius: "50%" }} />
           <span style={s.logoTxt}>
@@ -30,7 +29,6 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* Desktop Navigation Links */}
         <div style={s.links} className="nav-links-desktop">
           {navItems.map((n) => (
             <Link
@@ -39,10 +37,7 @@ export default function Navbar() {
               style={{
                 ...s.link,
                 color: loc.pathname === n.path ? "var(--primary-color)" : "var(--navbar-link-color)",
-                borderBottom:
-                  loc.pathname === n.path
-                    ? "2px solid var(--primary-color)"
-                    : "2px solid transparent",
+                borderBottom: loc.pathname === n.path ? "2px solid var(--primary-color)" : "2px solid transparent",
               }}
               onClick={() => setMenuOpen(false)}
             >
@@ -51,13 +46,13 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* Right Side: Theme, Cart, Order Button, Hamburger */}
         <div style={s.right}>
           <button style={s.themeToggleBtn} onClick={toggleTheme} title="Toggle theme">
             {theme === "dark" ? "☀️" : "🌙"}
           </button>
           <button style={s.cartBtn} onClick={() => setCartOpen(true)} title="Open cart">
-            🛒 {count > 0 && <span style={s.badge}>{count}</span>}
+            🛒
+            {count > 0 && <span style={s.badge}>{count}</span>}
           </button>
           <Link to="/menu" style={s.orderBtn} className="order-btn-desktop">
             Order Now
@@ -68,24 +63,21 @@ export default function Navbar() {
             onClick={() => setMenuOpen(!menuOpen)}
             title="Toggle menu"
           >
-            ☰
+            {menuOpen ? "✕" : "☰"}
           </button>
         </div>
       </nav>
 
-      {/* Mobile Menu (Only appears when menuOpen is true) */}
       {menuOpen && (
-        <div style={s.mobileMenu} className="mobile-menu">
+        <div style={s.mobileMenu} className="mobile-menu-open">
           {navItems.map((n) => (
             <Link
               key={n.path}
               to={n.path}
               style={{
                 ...s.mobileLink,
-                color:
-                  loc.pathname === n.path
-                    ? "var(--primary-color)"
-                    : "var(--navbar-mobile-link-color)",
+                color: loc.pathname === n.path ? "var(--primary-color)" : "var(--navbar-mobile-link-color)",
+                background: loc.pathname === n.path ? "var(--primary-color-alpha-15)" : "transparent",
               }}
               onClick={() => setMenuOpen(false)}
             >
@@ -94,66 +86,31 @@ export default function Navbar() {
           ))}
           <Link
             to="/menu"
-            style={{
-              ...s.orderBtn,
-              display: "block",
-              textAlign: "center",
-              marginTop: 12,
-              width: "100%",
-            }}
+            style={{ ...s.orderBtnMobile }}
             onClick={() => setMenuOpen(false)}
           >
-            Order Now
+            🍕 Order Now
           </Link>
         </div>
       )}
 
-      {/* Cart Drawer */}
       {cartOpen && <Cart onClose={() => setCartOpen(false)} />}
 
-      {/* Responsive CSS */}
       <style>{`
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--background-color); color: var(--text-color); }
 
-        body {
-          background: var(--background-color);
-          color: var(--text-color);
-        }
-
-        /* Desktop Styles */
         @media (min-width: 769px) {
-          .nav-links-desktop {
-            display: flex !important;
-          }
-          .burger-btn {
-            display: none !important;
-          }
-          .order-btn-desktop {
-            display: inline-block !important;
-          }
-          .mobile-menu {
-            display: none !important;
-          }
+          .nav-links-desktop { display: flex !important; }
+          .burger-btn { display: none !important; }
+          .order-btn-desktop { display: inline-block !important; }
+          .mobile-menu-open { display: none !important; }
         }
 
-        /* Mobile Styles */
         @media (max-width: 768px) {
-          .nav-links-desktop {
-            display: none !important;
-          }
-          .burger-btn {
-            display: block !important;
-          }
-          .order-btn-desktop {
-            display: none !important;
-          }
-          .mobile-menu {
-            display: flex !important;
-          }
+          .nav-links-desktop { display: none !important; }
+          .burger-btn { display: block !important; }
+          .order-btn-desktop { display: none !important; }
         }
       `}</style>
     </>
@@ -165,7 +122,7 @@ const s = {
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
-    padding: "14px 16px",
+    padding: "12px 20px",
     background: "var(--navbar-bg)",
     position: "sticky",
     top: 0,
@@ -179,14 +136,14 @@ const s = {
   logo: {
     display: "flex",
     alignItems: "center",
-    gap: 10,
+    gap: 8,
     textDecoration: "none",
     color: "var(--text-color)",
     flexShrink: 0,
-    transition: "opacity 0.2s",
   },
+  logoEmoji: { fontSize: 28 },
   logoTxt: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 900,
     color: "var(--text-color)",
     letterSpacing: "-0.5px",
@@ -201,11 +158,11 @@ const s = {
   link: {
     textDecoration: "none",
     fontSize: 15,
-    fontWeight: 600,
+    fontWeight: 700,
     padding: "6px 14px",
     transition: "color 0.2s, border-color 0.2s",
-    color: "var(--navbar-link-color)",
     cursor: "pointer",
+    borderBottom: "2px solid transparent",
   },
   right: {
     display: "flex",
@@ -220,9 +177,8 @@ const s = {
     borderRadius: 10,
     padding: "8px 12px",
     fontSize: 16,
-    cursor: "pointer",
     fontFamily: "'Nunito', sans-serif",
-    transition: "background 0.2s, transform 0.15s",
+    transition: "background 0.2s",
   },
   cartBtn: {
     background: "var(--navbar-cart-btn-bg)",
@@ -231,14 +187,13 @@ const s = {
     borderRadius: 10,
     padding: "8px 14px",
     fontSize: 16,
-    cursor: "pointer",
     position: "relative",
     fontFamily: "'Nunito', sans-serif",
     transition: "background 0.2s",
   },
   badge: {
     background: "var(--primary-color)",
-    color: "var(--button-primary-text)",
+    color: "#fff",
     borderRadius: "50%",
     fontSize: 10,
     padding: "2px 6px",
@@ -247,54 +202,68 @@ const s = {
     position: "absolute",
     top: -8,
     right: -8,
+    minWidth: 18,
+    textAlign: "center",
   },
   orderBtn: {
     background: "var(--primary-color)",
-    color: "var(--button-primary-text)",
+    color: "#fff",
     border: "none",
     borderRadius: 10,
     padding: "9px 18px",
     fontWeight: 700,
     fontSize: 14,
-    cursor: "pointer",
     textDecoration: "none",
     fontFamily: "'Nunito', sans-serif",
     transition: "background 0.2s, transform 0.15s",
   },
   burger: {
-    display: "none",
     background: "none",
     border: "none",
     color: "var(--text-color)",
     fontSize: 24,
-    cursor: "pointer",
     fontFamily: "'Nunito', sans-serif",
-    transition: "transform 0.2s",
     padding: "4px 8px",
   },
   mobileMenu: {
-    display: "none",
+    display: "flex",
     flexDirection: "column",
     background: "var(--navbar-mobile-menu-bg)",
     borderBottom: "1px solid var(--navbar-mobile-menu-border)",
-    padding: "16px",
+    padding: "12px 16px 20px",
     gap: 0,
     fontFamily: "'Nunito', sans-serif",
     position: "absolute",
-    top: 70,
+    top: 65,
     left: 0,
     right: 0,
     zIndex: 140,
     width: "100%",
+    boxShadow: "0 8px 32px rgba(0,0,0,0.15)",
   },
   mobileLink: {
     color: "var(--navbar-mobile-link-color)",
     textDecoration: "none",
-    fontSize: 15,
-    fontWeight: 600,
+    fontSize: 16,
+    fontWeight: 700,
     padding: "14px 16px",
     borderBottom: "1px solid var(--navbar-mobile-link-border)",
-    transition: "color 0.2s, background 0.2s",
     display: "block",
+    borderRadius: 8,
+    margin: "2px 0",
+    transition: "color 0.2s, background 0.2s",
+  },
+  orderBtnMobile: {
+    background: "var(--primary-color)",
+    color: "#fff",
+    borderRadius: 12,
+    padding: "12px 16px",
+    fontWeight: 800,
+    fontSize: 16,
+    textDecoration: "none",
+    textAlign: "center",
+    marginTop: 12,
+    display: "block",
+    fontFamily: "'Nunito', sans-serif",
   },
 };

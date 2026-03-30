@@ -1,115 +1,257 @@
-/* Base styles (light theme defaults) */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+
+/* ===================== LIGHT THEME ===================== */
 :root {
   --background-color: #f9f9f9;
-  /* Light background for default */
-  --text-color: #333333;
-  /* Dark text for light mode */
+  --text-color: #111111;
   --primary-color: #FF6B00;
   --secondary-color: #e65c00;
+
+  /* Cards */
   --card-background: #ffffff;
   --card-border: #e0e0e0;
-  --card-text-color: #333333;
-  --card-desc-color: #666666;
-  --card-cal-color: #999999;
-  --header-background: rgba(255, 255, 255, 0.95);
-  /* Semi-transparent white */
-  --footer-background: #f0f0f0;
+  --card-text-color: #111111;
+  --card-desc-color: #555555;
+  --card-cal-color: #888888;
+
+  /* Header / Navbar */
+  --header-background: rgba(255, 255, 255, 0.96);
+  --navbar-bg: rgba(255, 255, 255, 0.96);
+  --navbar-border: #e0e0e0;
+  --navbar-link-color: #111111;
+  --navbar-cart-btn-bg: #f0f0f0;
+  --navbar-cart-btn-border: #ddd;
+  --navbar-mobile-menu-bg: #ffffff;
+  --navbar-mobile-menu-border: #e0e0e0;
+  --navbar-mobile-link-color: #111111;
+  --navbar-mobile-link-border: #eeeeee;
+
+  /* Footer */
+  --footer-bg: #111111;
+  --footer-border: #222222;
+  --footer-stats-banner-bg: #0a0a0a;
+  --footer-stat-label-color: #888888;
+  --footer-col-title-color: #ffffff;
+  --footer-link-color: #aaaaaa;
+  --footer-qr-box-bg: #1a1a1a;
+  --footer-qr-box-border: #333333;
+  --footer-app-btn-bg: #222222;
+  --footer-app-btn-border: #333333;
+  --footer-app-btn-text: #ffffff;
+  --footer-bottom-text-color: #666666;
+  --footer-small-link-color: #666666;
+
+  /* Buttons */
   --button-primary-bg: #FF6B00;
-  --button-primary-text: #fff;
+  --button-primary-text: #ffffff;
   --button-ghost-bg: transparent;
-  --button-ghost-border: #ccc;
-  --button-ghost-text: #333;
+  --button-ghost-border: #bbbbbb;
+  --button-ghost-text: #111111;
+
+  /* Sections */
   --section-background-alt: #f0f0f0;
-  /* For sections like "How it Works" */
+
+  /* Promo */
   --promo-bg-start: #000000;
-  /* Black for light mode promo banner */
   --promo-bg-end: #333333;
-  /* Dark grey for light mode promo banner */
   --promo-text-color: #ffffff;
-  /* White text for light mode promo banner */
   --promo-accent-color: #ffffff;
-  /* White accent for light mode promo banner */
   --promo-button-bg: #ffffff;
-  /* White button for light mode promo banner */
   --promo-button-text: #000000;
-  /* Black text for light mode promo banner */
+
+  /* Reviews */
   --review-card-background: #ffffff;
   --review-card-border: #e0e0e0;
-  --review-text-color: #555;
+  --review-text-color: #444444;
   --review-avatar-bg: #FF6B00;
-  --review-avatar-text: #fff;
-  --cat-chip-bg: #f0f0f0;
-  --cat-chip-border: #ccc;
-  --cat-chip-text: #555;
+  --review-avatar-text: #ffffff;
 
-  /* New variables for alpha colors */
+  /* Category chips */
+  --cat-chip-bg: #f0f0f0;
+  --cat-chip-border: #cccccc;
+  --cat-chip-text: #444444;
+
+  /* Drawer / Cart */
+  --drawer-bg: #ffffff;
+  --drawer-border: #e0e0e0;
+  --drawer-item-bg: #f5f5f5;
+  --drawer-item-name-color: #111111;
+  --drawer-qty-btn-bg: #e0e0e0;
+  --drawer-qty-color: #111111;
+  --drawer-clear-btn-color: #666666;
+  --drawer-clear-btn-border: #cccccc;
+
+  /* Chatbot */
+  --chatbot-fab-bg: #FF6B00;
+  --chatbot-window-bg: #ffffff;
+  --chatbot-window-border: #e0e0e0;
+  --chatbot-header-bg: #f5f5f5;
+  --chatbot-header-border: #e0e0e0;
+  --chatbot-suggest-bg: #f0f0f0;
+  --chatbot-suggest-border: #cccccc;
+  --chatbot-suggest-text: #333333;
+  --chatbot-bot-msg-bg: #f0f0f0;
+  --chatbot-bot-msg-text: #111111;
+  --chatbot-user-msg-bg: #FF6B00;
+  --chatbot-user-msg-text: #ffffff;
+  --chatbot-input-bg: #f5f5f5;
+  --chatbot-input-border: #dddddd;
+  --chatbot-input-text: #111111;
+  --chatbot-send-btn-bg: #FF6B00;
+
+  /* Notifications */
+  --success-bg: #16a34a;
+  --error-bg: #dc2626;
+
+  /* Alpha */
   --primary-color-alpha-15: rgba(255, 107, 0, 0.15);
-  --primary-color-alpha-dark: #ff8c33;
-  /* Lighter shade of primary for gradients */
+  --primary-color-alpha-dark: #ffe5cc;
+
+  /* Location bar */
+  --loc-bar-bg: #fff8f0;
+  --loc-bar-border: #ffd9b3;
+  --loc-select-bg: #ffffff;
+  --loc-select-border: #FF6B00;
+  --loc-select-text: #111111;
 }
 
-/* Dark theme overrides */
+/* ===================== DARK THEME ===================== */
 html.dark-theme {
-  /* Apply to html element for global effect */
-  --background-color: #0f0f0f;
-  --text-color: #e0e0e0;
+  --background-color: #0a0a0a;
+  --text-color: #f0f0f0;
   --primary-color: #FF6B00;
   --secondary-color: #e65c00;
-  --card-background: #141414;
-  --card-border: #222;
-  --card-text-color: #e0e0e0;
-  --card-desc-color: #888;
-  --card-cal-color: #555;
-  --header-background: rgba(15, 15, 15, 0.95);
-  /* Semi-transparent dark */
-  --footer-background: #0a0a0a;
-  --button-primary-bg: #FF6B00;
-  --button-primary-text: #fff;
-  --button-ghost-bg: transparent;
-  --button-ghost-border: #444;
-  --button-ghost-text: #fff;
-  --section-background-alt: #161616;
-  --promo-bg-start: #1a1a1a;
-  /* Dark grey for dark mode promo banner */
-  --promo-bg-end: #333333;
-  /* Darker grey for dark mode promo banner */
-  --promo-text-color: #e0e0e0;
-  /* Light text for dark mode promo banner */
-  --promo-accent-color: #FF6B00;
-  /* Primary orange accent for dark mode promo banner */
-  --promo-button-bg: #FF6B00;
-  /* Primary orange button for dark mode promo banner */
-  --promo-button-text: #ffffff;
-  /* White text for dark mode promo banner */
-  --review-card-background: #141414;
-  --review-card-border: #222;
-  --review-text-color: #bbb;
-  --review-avatar-bg: #FF6B00;
-  --review-avatar-text: #fff;
-  --cat-chip-bg: #1a1a1a;
-  --cat-chip-border: #333;
-  --cat-chip-text: #ccc;
 
+  /* Cards */
+  --card-background: #141414;
+  --card-border: #2a2a2a;
+  --card-text-color: #f0f0f0;
+  --card-desc-color: #999999;
+  --card-cal-color: #666666;
+
+  /* Header / Navbar */
+  --header-background: rgba(10, 10, 10, 0.96);
+  --navbar-bg: rgba(10, 10, 10, 0.96);
+  --navbar-border: #1e1e1e;
+  --navbar-link-color: #f0f0f0;
+  --navbar-cart-btn-bg: #1a1a1a;
+  --navbar-cart-btn-border: #333333;
+  --navbar-mobile-menu-bg: #0f0f0f;
+  --navbar-mobile-menu-border: #222222;
+  --navbar-mobile-link-color: #f0f0f0;
+  --navbar-mobile-link-border: #222222;
+
+  /* Footer */
+  --footer-bg: #080808;
+  --footer-border: #1a1a1a;
+  --footer-stats-banner-bg: #050505;
+  --footer-stat-label-color: #666666;
+  --footer-col-title-color: #f0f0f0;
+  --footer-link-color: #888888;
+  --footer-qr-box-bg: #111111;
+  --footer-qr-box-border: #222222;
+  --footer-app-btn-bg: #1a1a1a;
+  --footer-app-btn-border: #333333;
+  --footer-app-btn-text: #f0f0f0;
+  --footer-bottom-text-color: #555555;
+  --footer-small-link-color: #555555;
+
+  /* Buttons */
+  --button-primary-bg: #FF6B00;
+  --button-primary-text: #ffffff;
+  --button-ghost-bg: transparent;
+  --button-ghost-border: #444444;
+  --button-ghost-text: #f0f0f0;
+
+  /* Sections */
+  --section-background-alt: #111111;
+
+  /* Promo */
+  --promo-bg-start: #1a1a1a;
+  --promo-bg-end: #2a2a2a;
+  --promo-text-color: #f0f0f0;
+  --promo-accent-color: #FF6B00;
+  --promo-button-bg: #FF6B00;
+  --promo-button-text: #ffffff;
+
+  /* Reviews */
+  --review-card-background: #141414;
+  --review-card-border: #2a2a2a;
+  --review-text-color: #cccccc;
+  --review-avatar-bg: #FF6B00;
+  --review-avatar-text: #ffffff;
+
+  /* Category chips */
+  --cat-chip-bg: #1a1a1a;
+  --cat-chip-border: #333333;
+  --cat-chip-text: #cccccc;
+
+  /* Drawer / Cart */
+  --drawer-bg: #0f0f0f;
+  --drawer-border: #222222;
+  --drawer-item-bg: #1a1a1a;
+  --drawer-item-name-color: #f0f0f0;
+  --drawer-qty-btn-bg: #2a2a2a;
+  --drawer-qty-color: #f0f0f0;
+  --drawer-clear-btn-color: #888888;
+  --drawer-clear-btn-border: #333333;
+
+  /* Chatbot */
+  --chatbot-fab-bg: #FF6B00;
+  --chatbot-window-bg: #0f0f0f;
+  --chatbot-window-border: #222222;
+  --chatbot-header-bg: #141414;
+  --chatbot-header-border: #222222;
+  --chatbot-suggest-bg: #1a1a1a;
+  --chatbot-suggest-border: #333333;
+  --chatbot-suggest-text: #cccccc;
+  --chatbot-bot-msg-bg: #1a1a1a;
+  --chatbot-bot-msg-text: #f0f0f0;
+  --chatbot-user-msg-bg: #FF6B00;
+  --chatbot-user-msg-text: #ffffff;
+  --chatbot-input-bg: #1a1a1a;
+  --chatbot-input-border: #333333;
+  --chatbot-input-text: #f0f0f0;
+  --chatbot-send-btn-bg: #FF6B00;
+
+  /* Notifications */
+  --success-bg: #16a34a;
+  --error-bg: #dc2626;
+
+  /* Alpha */
   --primary-color-alpha-15: rgba(255, 107, 0, 0.15);
-  --primary-color-alpha-dark: #2a1500;
-  /* Darker shade of primary for gradients */
+  --primary-color-alpha-dark: #1a0800;
+
+  /* Location bar */
+  --loc-bar-bg: #1a0d00;
+  --loc-bar-border: #3d1f00;
+  --loc-select-bg: #1a1a1a;
+  --loc-select-border: #FF6B00;
+  --loc-select-text: #f0f0f0;
 }
 
-/* Global body styles using CSS variables */
-body {
-  font-family: 'Nunito', sans-serif;
+/* ===================== GLOBAL ===================== */
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
   background-color: var(--background-color);
   color: var(--text-color);
   min-height: 100vh;
   transition: background-color 0.3s ease, color 0.3s ease;
-  /* Smooth transition */
+  overflow-x: hidden;
 }
 
-/* General link styling */
 a {
-  color: var(--text-color);
+  color: inherit;
   text-decoration: none;
 }
 
@@ -117,7 +259,15 @@ a:hover {
   color: var(--primary-color);
 }
 
-/* Keyframe animations (keep as is, they don't directly depend on theme variables) */
+/* ===================== PIZZA CURSOR ===================== */
+body,
+a,
+button,
+[role="button"] {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E🍕%3C/text%3E%3C/svg%3E") 4 4, auto;
+}
+
+/* ===================== ANIMATIONS ===================== */
 @keyframes float {
 
   0%,
@@ -127,6 +277,18 @@ a:hover {
 
   50% {
     transform: translateY(-18px) rotate(5deg);
+  }
+}
+
+@keyframes floatPizza {
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-16px) rotate(4deg);
   }
 }
 
@@ -169,5 +331,65 @@ a:hover {
 
   50% {
     box-shadow: 0 0 0 20px rgba(255, 107, 0, 0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+
+  60% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
   }
 }
